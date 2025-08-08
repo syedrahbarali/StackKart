@@ -14,8 +14,10 @@ const productModel = mongoose.Schema({
     require: true,
   },
   category: {
-    ref: "Category",
-    type: mongoose.Schema.Types.ObjectId,
+    // ref: "Category",
+    // type: mongoose.Schema.Types.ObjectId,
+    type: String,
+    require: true,
   },
   brand: {
     type: String,
@@ -26,8 +28,8 @@ const productModel = mongoose.Schema({
     require: true,
   },
   images: {
-    type: Array,
-    require: true,
+    type: [Object],
+    // require: true,  //TODO: Make it required
   },
   ratings: {
     ref: "Reviews",
