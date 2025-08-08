@@ -1,14 +1,7 @@
-const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const generateAccessToken = (password) => {
-    return bcrypt.hashSync(password,10,(err,hash) => {
-        if(err) {
-            console.log("Hashing error",err)
-            return;
-        }
-
-        console.log("Hashed password",hash)
-    })
+    return jwt.sign(password, `${process.env.ACCESS_TOKEN_SECRET}`);
 }
 
 module.exports = generateAccessToken

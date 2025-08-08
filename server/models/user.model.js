@@ -24,7 +24,10 @@ const userModel = mongoose.Schema({
     street: String,
     zip: String,
   },
-  isAdmin: Boolean,
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   timestamp: {
     type: Date,
     default: Date.now,

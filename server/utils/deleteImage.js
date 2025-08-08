@@ -6,8 +6,10 @@ const deleteImage = async(image) => {
         const uploadIndex = parts.indexOf("upload");
         const publicIdWithExt = parts.slice(uploadIndex + 2).join("/"); 
         const publicId = publicIdWithExt.substring(0, publicIdWithExt.lastIndexOf(".")); 
+        
         const result = await cloudinary.uploader.destroy(publicId);
         console.log(result);
+        
         return result;
     } catch (err) {
         console.log(err)

@@ -29,7 +29,7 @@ const productModel = mongoose.Schema({
   },
   images: {
     type: [Object],
-    // require: true,  //TODO: Make it required
+    require: true,  
   },
   ratings: {
     ref: "Reviews",

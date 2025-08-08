@@ -20,7 +20,16 @@ const login = async(req,res) => {
             return res.status(401).json({message: "Email or password is incorrect"})
         }
 
-        const token = generateAccessToken(password);
+        const token = generateAccessToken({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin
+        });
+        console.log(token)
+        // res.set('Authorization', `Bearer ${token}`);
+
+        res.cookie("token", token, {httpOnly: true});
         return res.status(200).json({message: "Login successful", token})
     } catch (err) {
         console.log(err.message)
@@ -46,7 +55,8 @@ const createUser = async(req,res) => {
             return res.status(400).json({message: "User already exists"})
         }
 
-        const newUser = new User({name, email, password, phone});
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({name, email, password: encryptedPassword, phone});
         const user = await newUser.save();
 
         if(user?._id) {
