@@ -1,12 +1,21 @@
-import React from 'react'
+import HomeLayout from '../layouts/HomeLayout'
+import Home from '../pages/Home'
+import Login from '../pages/Login'
+import Signup from '../pages/Signup'
+import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import { Toaster} from "react-hot-toast";
 
 const App = () => {
   return (
-    <div className=''>
+    <div id='wrapper' className=''>
+      <Toaster />
       <Routes>
         <Route path="/" element={<HomeLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="" element={<Home />} />
         </Route>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
       </Routes>
     </div>
   )

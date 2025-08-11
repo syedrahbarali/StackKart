@@ -1,0 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#wrapper {
+    min-height: calc(100vh - 74px);
+}

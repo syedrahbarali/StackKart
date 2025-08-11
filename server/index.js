@@ -8,13 +8,13 @@ const customerRoutes = require("./routes/customer.routes");
 app.get("/", (req, res) => res.send("Hello World!"))
 
 // auth routes: Login, Create Account
-app.use("/api/v1/auth/", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 // product routes: createProduct, updateProduct, deletProduct
-app.use("/api/v1/product/", productRoutes);
+app.use("/api/v1/product", productRoutes);
 
 // category routes: createCategory, updateCategory, deleteCategory
-app.use("/api/v1/category/", categoryRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 // customer routes: createOrder
-app.use("/api/v1/customer/", customerRoutes)
+app.use("/api/v1/customer", customerRoutes)

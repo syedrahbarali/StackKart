@@ -1,8 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const Logo = () => {
+const Logo = ({className=""}) => {
   return (
-    <div className=''>
+    <div className={`${className}`}>
       <Link to="/">Logo</Link>
     </div>
   )

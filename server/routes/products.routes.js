@@ -9,7 +9,7 @@ const authentication = require("../middlewares/authentication");
 const adminAuthentication = require("../middlewares/adminAuthentication");
 const routes = require("express").Router();
 
-routes.get("/getProduct/:productId", authentication, getProduct);
+routes.get("/getProduct/:productId", getProduct);
 routes.post(
   "/createProduct",
   adminAuthentication,
