@@ -39,7 +39,7 @@ const login = async(req,res) => {
 
 const createUser = async(req,res) => {
     try {
-        const {name, email, password, phone} = req.body;
+        const {name, email, password, phone, isAdmin = false} = req.body;
 
         if(!name.trim() || !email.trim() || !password.trim() || !phone.trim()) {
             return res.status(400).json({message: "All fields are required"})
@@ -56,7 +56,7 @@ const createUser = async(req,res) => {
         }
 
         const encryptedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({name, email, password: encryptedPassword, phone});
+        const newUser = new User({name, email, password: encryptedPassword, phone , isAdmin});
         const user = await newUser.save();
 
         if(user?._id) {

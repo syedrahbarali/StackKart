@@ -24,6 +24,24 @@ const userModel = mongoose.Schema({
     street: String,
     zip: String,
   },
+  orders: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+    default: [],
+  },
+  cart: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
+      }
+    ],
+    default: [],
+  },
   isAdmin: {
     type: Boolean,
     default: false,
@@ -31,7 +49,7 @@ const userModel = mongoose.Schema({
   timestamp: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 module.exports = mongoose.model("User", userModel);
