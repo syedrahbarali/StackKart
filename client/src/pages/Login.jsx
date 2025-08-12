@@ -4,7 +4,8 @@ import { loginUser } from "../services/authServices";
 import { useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import {authSliceActions} from "../store/slices/auth.slice"
+import { login } from "../store/slices/auth.slice";
+import { getCartItems } from "../store/slices/cart.slice";
 
 const Login = () => {
   const email = useRef();
@@ -12,14 +13,20 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {login} = authSliceActions
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await loginUser(email.current.value, password.current.value).then((res) => {
       if (res.ok) {
-        dispatch(login(res.user))
+        console.log(res.user);
+        dispatch(login(res.user));
+
+        if(res?.user?.cart?.length > 0) {
+          dispatch(getCartItems(res.user.cart))
+        }
+
         toast.success("Welcome " + res?.user?.name);
+
         setTimeout(() => {
           navigate("/");
         }, 1500);

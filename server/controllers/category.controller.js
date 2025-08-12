@@ -59,4 +59,16 @@ const renameCategory = async(req,res) => {
     }
 }
 
-module.exports = {createCategory, deleteCategory, renameCategory};
+const getAllCategories = async(req,res) => {
+    try {
+        const categories = await Category.find({}).sort({createdAt: -1});
+        if(categories.length) {
+            return res.status(200).json({categories});
+        }
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({message: err.message});
+    }
+}
+
+module.exports = {createCategory, deleteCategory, renameCategory, getAllCategories};

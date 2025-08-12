@@ -98,9 +98,10 @@ const deleteProduct = async(req, res) => {
   }
 }
 
-const getProduct = async(req, res) => {
+const getProductById = async(req, res) => {
   try {
     const { productId } = req.params;
+    console.log("Fetching from server")
     const product = await Product.findById(productId);
 
     if(!product) {
@@ -113,5 +114,26 @@ const getProduct = async(req, res) => {
   }
 }
 
+const getProductByCategory = async(req, res) => {
+  try {
+    const { category } = req.params;
+    const products = await Product.find({category});
+    return res.status(200).json({products, ok: true});
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: err.message });
+  }
+}
 
-module.exports = { createProduct , updateProduct , deleteProduct, getProduct };
+const getAllProducts = async(req, res) => {
+  try {
+    const products = await Product.find({});
+    return res.status(200).json({products, ok: true});
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: err.message });
+  }
+}
+
+
+module.exports = { createProduct , updateProduct , deleteProduct, getProductById, getAllProducts, getProductByCategory };
