@@ -25,7 +25,7 @@ const addToCart = async (req, res) => {
     user.cart.push(savedItemToCart._id);
     await user.save();
 
-    return res.status(201).json({ message: "Product Added", ok: true });
+    return res.status(201).json({ message: "Product Added", newItem: savedItemToCart, ok: true });
   } catch (err) {
     console.error("Error adding to cart:", err);
     res.status(500).json({ message: "Server Error: " + err.message, ok: false });

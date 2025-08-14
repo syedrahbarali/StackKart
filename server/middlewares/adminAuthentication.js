@@ -2,12 +2,13 @@ const jwt = require("jsonwebtoken");
 
 const adminAuthentication = async (req, res, next) => {
   try {
+    console.log("Inside Admin Middleware")
     const token =
       req?.cookies?.token || req?.headers?.authorization?.split(" ");
     if (!token) {
       return res
         .status(401)
-        .json({ message: "Unauthorized: Token is missing!" });
+        .json({ message: "Unauthorized" });
     }
 
     const user = jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`);
@@ -18,7 +19,7 @@ const adminAuthentication = async (req, res, next) => {
     } else {
       return res
         .status(401)
-        .json({ message: "Unauthorized: Admin access required" });
+        .json({ message: "Unauthorized" });
     }
   } catch (err) {
     console.log(err.message);

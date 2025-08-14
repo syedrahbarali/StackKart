@@ -15,7 +15,6 @@ export const fetchProductById = async(productId) => {
 }
 
 export const fetchAddToCart = async(item) => {
-    console.log(item)
     return await fetch("http://localhost:3000/api/v1/customer/addToCart", {
         method: "PATCH",
         headers: {

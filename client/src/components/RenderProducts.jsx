@@ -40,7 +40,7 @@ const RenderProducts = ({ selectedCategory }) => {
         }
 
         handleFetchProducts();
-    }, [selectedCategory]);
+    }, [selectedCategory, dispatch]);
 
     return <>
         {

@@ -12,7 +12,12 @@ const login = async (req, res) => {
         .json({ message: "Email and password are required" });
     }
 
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).populate({
+      path: "cart",
+      populate: {
+        path: "product"
+      }
+    });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -31,7 +36,6 @@ const login = async (req, res) => {
       isAdmin: user.isAdmin,
     });
     console.log(token);
-    // res.set('Authorization', `Bearer ${token}`);
 
     user = user.toObject();
     delete user.password;
@@ -40,6 +44,22 @@ const login = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Login successful", token, user, ok: true });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const findUser = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById(_id).populate({
+      path: "cart",
+      populate: {
+        path: "product"
+      }
+    });
+    return res.status(200).json({ message: "User found", user, ok: true });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: err.message });
@@ -82,4 +102,14 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { login, createUser };
+const logout = async(req,res) => {
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({message: "Logout successful", ok: true});
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: err.message });
+  }
+}
+
+module.exports = { login, findUser, createUser, logout };

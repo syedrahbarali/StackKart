@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import {  fetchAddToCart, fetchProductById } from '../services/productServices';
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchAddToCart, fetchProductById } from '../services/productServices';
 import { addToCart } from '../store/slices/cart.slice';
 import toast from 'react-hot-toast';
+import { updateUser } from '../store/slices/auth.slice';
 
 const Product = () => {
 
   const { productId } = useParams();
-  
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
-  const productFromStore = useSelector(state => state.product?.products?.find(product => product._id === productId));
+  const state = useSelector(state => state.auth);
+  const productFromStore = useSelector(state => state.product?.find(product => product._id === productId));
 
   // Calculate average rating
   const averageRating = product?.ratings && product?.ratings?.length > 0
@@ -24,17 +27,17 @@ const Product = () => {
   const formatDate = (date) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   useEffect(() => {
-    console.log("Fetching Product")
-
     if (productFromStore) {
+      console.log("Product Fetched From Store")
       setProduct(productFromStore);
       setLoading(false);
     } else {
       setLoading(true);
-      console.log(productId)
+
       fetchProductById(productId).then(res => {
-        console.log(res)
+
         if (res?.ok) {
+          console.log("Product Fetched From Store")
           setProduct(res.product);
         }
       }).finally(() => {
@@ -45,17 +48,27 @@ const Product = () => {
 
   const handleAddToCart = async () => {
     // TODO: Quantity need to be Dynamic
-    await fetchAddToCart({product: product._id}).then(res => {
-      if(res?.ok) {
-        console.log(res)
+    await fetchAddToCart({ product: product._id }).then(res => {
+      if (res?.ok) {
+        // console.log("Added to Cart", res)
         toast.success(res.message)
-        
+
         // TODO: Mention Quantity
-        dispatch(addToCart({item:product}))
+        dispatch(addToCart({ item: product }))
+
+        const user = { ...state.user, cart: [...state.user.cart, res.newItem._id] }
+        dispatch(updateUser(user))
       } else {
-        console.log(res)
+        // console.log("Error", res)
+        toast.error(res.message)
+
+        setTimeout(() => {
+          if(res.message === "Unauthorized") {
+            navigate("/login")
+          }
+        }, 1000);
       }
-    }).catch(err => console.log("Error" + err.message))
+    })
   }
 
   return <>

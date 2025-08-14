@@ -4,6 +4,7 @@ const authRoutes = require("./routes/auth.routes")
 const productRoutes = require("./routes/products.routes");
 const categoryRoutes = require("./routes/categories.routes");
 const customerRoutes = require("./routes/customer.routes");
+const adminRoutes = require("./routes/admin.routes");
 
 app.get("/", (req, res) => res.send("Hello World!"))
 
@@ -18,3 +19,6 @@ app.use("/api/v1/category", categoryRoutes);
 
 // customer routes: createOrder
 app.use("/api/v1/customer", customerRoutes)
+
+// admin routes: dashboard Data
+app.use("/api/v1/admin", adminRoutes)
