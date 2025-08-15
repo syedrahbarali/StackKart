@@ -15,6 +15,11 @@ import { getCartItems } from '../store/slices/cart.slice'
 import { FourSquare } from 'react-loading-indicators'
 import Profile from '../pages/Profile'
 import AdminDashboard from '../pages/admin/AdminDashboard'
+import ProductList from '../pages/admin/ProductList'
+import OrderList from '../pages/admin/OrderList'
+import EditProduct from '../pages/admin/EditProduct'
+import UserList from '../pages/admin/UserList'
+// import UserList from '../pages/admin/UserList'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -45,7 +50,11 @@ const App = () => {
               <Route path="/product/:productId" element={<Product />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile/:userId" element={<Profile />} />
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/products" element={<ProductList />} />
+              <Route path="/admin/products/:productId/edit" element={<EditProduct />} />
+              <Route path="/admin/orders" element={<OrderList />} />
+              <Route path="/admin/users" element={<UserList />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

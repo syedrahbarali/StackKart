@@ -13,6 +13,7 @@ const dashboardData = async (req, res) => {
     // 2. Total Sales (sum of order items)
     const orders = await Order.aggregate([
       { $match: { paymentStatus: "Success" } },
+      { $unwind: "$items" },
       {
         $lookup: {
           from: "products",
@@ -70,6 +71,49 @@ const dashboardData = async (req, res) => {
       }],
     };
 
+    // 5. Order Status Distribution
+    const orderStatusRaw = await Order.aggregate([
+      { $group: { _id: "$deliveryStatus", count: { $sum: 1 } } }
+    ]);
+    const orderStatusLabels = ["Delivered", "Pending", "Cancelled", "Processing"];
+    const orderStatusDistribution = {
+      labels: orderStatusLabels,
+      datasets: [{
+        data: orderStatusLabels.map(label => {
+          const found = orderStatusRaw.find(o => o._id === label);
+          return found ? found.count : 0;
+        }),
+        backgroundColor: ["#34d399", "#fbbf24", "#f87171", "#60a5fa"],
+        borderWidth: 1,
+      }],
+    };
+
+    // 6. Top Selling Products (by units sold)
+    const topProductsRaw = await Order.aggregate([
+      { $unwind: "$items" },
+      { $group: { _id: "$items.productId", unitsSold: { $sum: "$items.quantity" } } },
+      { $sort: { unitsSold: -1 } },
+      { $limit: 4 },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      { $unwind: "$product" },
+      { $project: { _id: 0, name: "$product.name", unitsSold: 1 } }
+    ]);
+    const topSellingProducts = {
+      labels: topProductsRaw.map(p => p.name),
+      datasets: [{
+        label: "Units Sold",
+        data: topProductsRaw.map(p => p.unitsSold),
+        backgroundColor: "#6366f1"
+      }]
+    };
+
     // Final response
     res.json({
       totalProducts,
@@ -77,7 +121,9 @@ const dashboardData = async (req, res) => {
       totalUsers,
       totalSales,
       salesData,
-      categoryDistribution
+      categoryDistribution,
+      orderStatusDistribution,
+      topSellingProducts
     });
 
   } catch (err) {
@@ -86,4 +132,24 @@ const dashboardData = async (req, res) => {
   }
 }
 
-module.exports = { dashboardData };
+const allOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({});
+    return res.status(200).json({ message: "Orders fetches" , orders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch orders" });
+  }
+}
+
+const allUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).select("-password -__v");
+    return res.status(200).json({ message: "Users fetched", users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch users" });
+  }
+}
+
+module.exports = { dashboardData, allOrders, allUsers };

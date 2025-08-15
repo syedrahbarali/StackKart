@@ -9,12 +9,15 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     ];
     return (
         <div
-            className={`absolute h-full left-0 bg-gradient-to-b from-indigo-700 to-purple-800 text-white p-6 transform transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-64' : 'w-20'
-                }`}
+            className={`fixed left-0 top-16 bg-gradient-to-b from-indigo-700 to-purple-800 text-white transition-all duration-300 ease-in-out z-30
+                ${isSidebarOpen ? 'w-64 p-6' : 'w-20 p-3'}
+            `}
+            style={{ height: 'calc(100vh - 4rem)', overflowY: 'auto' }}
         >
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="text-white mb-6 focus:outline-none transition-transform duration-300 hover:scale-110"
+                className="text-white mb-6 focus:outline-none transition-transform duration-300 hover:scale-110 flex items-center justify-center w-10 h-10 rounded-full bg-indigo-800/40"
+                aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
             >
                 <svg
                     className="w-6 h-6"
@@ -32,21 +35,23 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 </svg>
             </button>
 
-            <nav>
+            <nav className="flex flex-col gap-2 mt-4">
                 {navItems.map((item, index) => (
                     <Link
                         key={index}
                         to={item.link}
-                        className="flex items-center gap-3 py-2 rounded-lg hover:bg-indigo-600 transition-all duration-300 transform hover:scale-105 overflow-hidden"
+                        className={`flex items-center rounded-lg hover:bg-indigo-600 transition-all duration-300 transform hover:scale-105 overflow-hidden
+                            ${isSidebarOpen ? 'gap-3 px-3 py-2' : 'justify-center p-3'}
+                        `}
                     >
                         {/* Icon */}
-                        <span className="text-lg">{item.icon}</span>
+                        <span className={`text-lg flex-shrink-0 flex items-center justify-center ${!isSidebarOpen ? 'mx-auto' : ''}`}>{item.icon}</span>
 
                         {/* Text with animation */}
                         <span
-                            className={`transition-all duration-300 ease-in-out ${isSidebarOpen
-                                ? "opacity-100 translate-x-0 w-auto"
-                                : "opacity-0 -translate-x-5 w-0"
+                            className={`transition-all duration-300 ease-in-out whitespace-nowrap ${isSidebarOpen
+                                ? "opacity-100 translate-x-0 w-auto ml-2"
+                                : "opacity-0 -translate-x-5 w-0 ml-0"
                                 }`}
                         >
                             {item.name}

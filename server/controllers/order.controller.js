@@ -6,15 +6,21 @@ const createOrder = async (req, res) => {
     const { _id } = req.user;
     const { items, shippingAddress, paymentMethod } = req.body;
 
+    const totalAmount = items.reduce((total, item) => {
+      return total + (item.quantity * item.price);
+    }, 0);
+
     const newOrder = new Order({
       userId: _id,
       items,
+      totalAmount,
       shippingAddress,
       paymentMethod,
     });
 
     const order = await newOrder.save();
     console.log("Created order: ", order);
+
     if (order?._id) {
       const user = await User.findById(_id);
       user.orders.push(order._id);
