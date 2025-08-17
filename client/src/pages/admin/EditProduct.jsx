@@ -1,20 +1,24 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchProductById } from '../../services/productServices';
-import { updateProduct } from '../../services/adminService';
+import { updateProducts } from '../../services/adminService';
+import toast from 'react-hot-toast';
 
 const EditProduct = () => {
     const { productId } = useParams();
-    const navigate = useNavigate();
     const [product, setProduct] = useState(null);
+    const [originalProduct, setOriginalProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState([]); // all images (old + new)
+    const [newImages, setNewImages] = useState([]); // only new files
     const fileInputRef = useRef();
 
     useEffect(() => {
         fetchProductById(productId).then(res => {
             if (res?.product) {
+                console.log('Fetched product:', res.product);
                 setProduct(res.product);
+                setOriginalProduct(res.product);
                 setImages(res.product.images || []);
             }
             setLoading(false);
@@ -28,29 +32,11 @@ const EditProduct = () => {
     };
 
     // Add image handler
-    const handleAddImage = async (e) => {
+    const handleAddImage = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
-        // Upload image to backend
-        const formData = new FormData();
-        formData.append('gallery', file);
-
-        try {
-            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/product/upload`, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include',
-            });
-            const data = await res.json();
-            if (data && data.image) {
-                setImages(prev => [...prev, data.image]);
-            } else {
-                alert('Image upload failed');
-            }
-        } catch (err) {
-            alert(err.message);
-        }
+        setImages(prev => [...prev, { path: URL.createObjectURL(file) }]); // for preview
+        setNewImages(prev => [...prev, file]); // only new files
         e.target.value = '';
     };
 
@@ -60,16 +46,29 @@ const EditProduct = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
+        if (!originalProduct) return;
 
-        // Prepare product data with images
-        const updatedProduct = { ...product, images };
-        const res = await updateProduct(productId, updatedProduct);
-        if (res?.message?.toLowerCase().includes('success')) {
-            alert('Product updated successfully!');
-            navigate('/admin/products');
-        } else {
-            alert(res?.message || 'Failed to update product');
-        }
+        const formData = new FormData();
+        // Only append changed fields
+        ["name", "brand", "category", "price", "stock", "description"].forEach(field => {
+            if (product[field] !== originalProduct[field]) {
+                formData.append(field, product[field]);
+            }
+        });
+        formData.append('_id', productId);
+
+        // Only append new images
+        newImages.forEach(file => {
+            formData.append('gallery', file);
+        });
+
+        await updateProducts(formData).then(res => {
+            if(res?.ok) {
+                toast.success(res.message)
+            } else {
+                toast.error(res.message || 'Failed to update product');
+            }
+        })
     };
 
     if (loading) return <div className="text-center text-lg mt-10">Loading...</div>;
@@ -80,6 +79,7 @@ const EditProduct = () => {
                 <h1 className="text-2xl font-bold text-indigo-800 mb-6">Edit Product</h1>
 
                 {/* Product Images */}
+
                 {/* Product Images with Add/Delete */}
                 <div className="flex gap-2 mb-6 overflow-x-auto items-center">
                     {images.map((img, idx) => (
@@ -102,6 +102,7 @@ const EditProduct = () => {
                             </button>
                         </div>
                     ))}
+                    
                     {images.length < 5 && (
                         <button
                             type="button"

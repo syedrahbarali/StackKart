@@ -12,18 +12,18 @@ const login = async (req, res) => {
         .json({ message: "Email and password are required" });
     }
 
-    let user = await User.findOne({ email }).populate({
+    let user = await User.findOne({ email: email.toLowerCase() }).populate({
       path: "cart",
       populate: {
-        path: "product"
-      }
+        path: "product",
+      },
     });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (!bcrypt.compare(password, user.password)) {
+    if (!(await bcrypt.compare(password, user.password))) {
       return res
         .status(401)
         .json({ message: "Email or password is incorrect" });
@@ -35,7 +35,6 @@ const login = async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
     });
-    console.log(token);
 
     user = user.toObject();
     delete user.password;
@@ -56,8 +55,8 @@ const findUser = async (req, res) => {
     const user = await User.findById(_id).populate({
       path: "cart",
       populate: {
-        path: "product"
-      }
+        path: "product",
+      },
     });
     return res.status(200).json({ message: "User found", user, ok: true });
   } catch (err) {
@@ -102,14 +101,14 @@ const createUser = async (req, res) => {
   }
 };
 
-const logout = async(req,res) => {
+const logout = async (req, res) => {
   try {
     res.clearCookie("token");
-    return res.status(200).json({message: "Logout successful", ok: true});
+    return res.status(200).json({ message: "Logout successful", ok: true });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 module.exports = { login, findUser, createUser, logout };

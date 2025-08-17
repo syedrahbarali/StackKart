@@ -7,7 +7,6 @@ const {
   getProductById,
 } = require("../controllers/products.controller");
 const upload = require("../middlewares/upload");
-const authentication = require("../middlewares/authentication");
 const adminAuthentication = require("../middlewares/adminAuthentication");
 const routes = require("express").Router();
 

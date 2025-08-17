@@ -6,6 +6,13 @@ const StatsCards = ({dashboardData}) => {
     const handleCardClick = (path) => {
         navigate(path);
     };
+    
+    // Extract data with default values of 0 to prevent showing undefined
+    const totalProducts = dashboardData?.totalProducts || 0;
+    const totalOrders = dashboardData?.totalOrders || 0;
+    const totalUsers = dashboardData?.totalUsers || 0;
+    const totalSales = dashboardData?.totalSales || 0;
+    
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div
@@ -16,7 +23,7 @@ const StatsCards = ({dashboardData}) => {
                 aria-label="View Products"
             >
                 <h3 className="text-lg font-semibold">Total Products</h3>
-                <p className="text-2xl">{dashboardData.totalProducts}</p>
+                <p className="text-2xl">{totalProducts}</p>
             </div>
             <div
                 className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6 rounded-lg shadow-md hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 cursor-pointer"
@@ -26,7 +33,7 @@ const StatsCards = ({dashboardData}) => {
                 aria-label="View Orders"
             >
                 <h3 className="text-lg font-semibold">Total Orders</h3>
-                <p className="text-2xl">{dashboardData.totalOrders}</p>
+                <p className="text-2xl">{totalOrders}</p>
             </div>
             <div
                 className="bg-gradient-to-r from-blue-500 to-teal-500 text-white p-6 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300 transform hover:scale-105 cursor-pointer"
@@ -36,7 +43,7 @@ const StatsCards = ({dashboardData}) => {
                 aria-label="View Users"
             >
                 <h3 className="text-lg font-semibold">Total Users</h3>
-                <p className="text-2xl">{dashboardData.totalUsers}</p>
+                <p className="text-2xl">{totalUsers}</p>
             </div>
             <div
                 className="bg-gradient-to-r from-teal-500 to-green-500 text-white p-6 rounded-lg shadow-md hover:bg-teal-600 transition-all duration-300 transform hover:scale-105 cursor-pointer"
@@ -46,7 +53,7 @@ const StatsCards = ({dashboardData}) => {
                 aria-label="View Sales"
             >
                 <h3 className="text-lg font-semibold">Total Sales (₹)</h3>
-                <p className="text-2xl">₹{dashboardData.totalSales}</p>
+                <p className="text-2xl">₹{totalSales}</p>
             </div>
         </div>
     )

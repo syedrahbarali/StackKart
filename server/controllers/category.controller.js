@@ -6,15 +6,17 @@ const createCategory = async(req,res) => {
 
         const {name} = req.body;
 
-        const category = await Category.create({name});
+        const category = await Category.create({name, ok: true});
         const newCategory = await category.save();
 
         if(newCategory?._id) {
-            return res.status(201).json({message: "Category created successfully", newCategory});
+            return res.status(201).json({message: "Category created successfully", newCategory, ok: true});
+        } else {
+            throw new Error("Failed to create category");
         }
     } catch (err) {
         console.log(err.message);
-        res.status(500).json({message: err.message});
+        res.status(500).json({message: err.message, ok: false});
     }
 }
 
@@ -63,11 +65,13 @@ const getAllCategories = async(req,res) => {
     try {
         const categories = await Category.find({}).sort({createdAt: -1});
         if(categories.length) {
-            return res.status(200).json({categories});
+            return res.status(200).json({ message: "Categories found", categories, ok: true});
+        } else {
+            throw new Error("No categories found");
         }
     } catch (err) {
         console.log(err.message);
-        res.status(500).json({message: err.message});
+        return res.status(500).json({message: err.message, ok: false});
     }
 }
 

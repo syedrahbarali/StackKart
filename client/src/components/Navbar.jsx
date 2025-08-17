@@ -4,21 +4,25 @@ import Container from "./Container";
 import Logo from "./Logo";
 import { useSelector } from "react-redux";
 import { IoCartOutline } from "react-icons/io5";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { logoutUser } from "../services/authServices";
 import { toast } from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth);
+  const cart = useSelector((state) => state.cart);
   // const [isOpen, setIsOpen] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  
+
+  // Calculate total cart items count
+  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,8 +38,8 @@ const Navbar = () => {
       setTimeout(() => {
         navigate("/login");
       }, 1000);
-    })
-  }
+    });
+  };
 
   const navItems = [
     {
@@ -95,9 +99,9 @@ const Navbar = () => {
               {/* Cart Icon */}
               <Link to="/cart" className="relative flex items-center">
                 <IoCartOutline size={22} className="sm:size-[20px]" />
-                {user.user?.cart.length > 0 && (
+                {cartItemCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {user.user?.cart.length}
+                    {cartItemCount}
                   </span>
                 )}
               </Link>
@@ -125,19 +129,26 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  <MenuItem onClick={handleClose}><Link to={`/profile/${user.user?._id}`}>Profile</Link></MenuItem>
                   <MenuItem onClick={handleClose}>
-                    <Link to={`/${user.user.isAdmin ? "admin/" : ""}dashboard`}>Dashboard</Link>
+                    <Link to={`/profile/${user.user?._id}`}>Profile</Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose}>
-                    <Button onClick={handleLogout} variant="outlined" color="error">
+                    <Link to={`/${user.user.isAdmin ? "admin/" : ""}dashboard`}>
+                      Dashboard
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Button
+                      onClick={handleLogout}
+                      variant="outlined"
+                      color="error"
+                    >
                       Log out
                     </Button>
                   </MenuItem>
                 </Menu>
               </div>
             </div>
-
           </>
         )}
 
@@ -146,9 +157,9 @@ const Navbar = () => {
           {user.status && (
             <Link to="/cart" className="relative">
               <IoCartOutline size={24} />
-              {user.user?.cart.length > 0 && (
+              {cartItemCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                  {user.user?.cart.length}
+                  {cartItemCount}
                 </span>
               )}
             </Link>
@@ -178,20 +189,10 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <button className="w-full py-2 px-4 border border-indigo-600 text-indigo-600 rounded-lg bg-transparent hover:bg-indigo-600 hover:text-white transition-all duration-300 ease-in-out hover:shadow-md">
-                  Log in
-                </button>
-              </li>
-              <li>
-                <button className="w-full py-2 px-4 border border-indigo-600 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 ease-in-out hover:shadow-md">
-                  Sign up
-                </button>
-              </li>
             </ul>
           </Container>
-        </div>
-      )} */}
+        </div> */}
+      {/* )} */}
     </header>
   );
 };

@@ -15,15 +15,19 @@ const HeroSection = () => {
       setLoading(true);
 
       await fetchCategories().then(res => {
-        res.categories.unshift({ id: 0, name: "All" });
-        setCategories(res.categories);
+        if (res?.ok) {
+          res.categories.unshift({ id: 0, name: "All" });
+          setCategories(res.categories);
+        } else {
+          console.error(res.message);
+        }
       }).finally(() => {
         setLoading(false)
       });
     }
 
     handleFetchCategories();
-  },[]);
+  }, []);
 
   return (
     <>
@@ -36,7 +40,7 @@ const HeroSection = () => {
           <>
             <Banner categories={categories} />
             <div>
-              <CategoriesSlide categories={categories} setSelectedCategory={setSelectedCategory}  />
+              <CategoriesSlide categories={categories} setSelectedCategory={setSelectedCategory} />
               <RenderProducts selectedCategory={selectedCategory} />
             </div>
 
