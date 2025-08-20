@@ -132,11 +132,18 @@ const Navbar = () => {
                   <MenuItem onClick={handleClose}>
                     <Link to={`/profile/${user.user?._id}`}>Profile</Link>
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
+                  {/* <MenuItem onClick={handleClose}>
                     <Link to={`/${user.user.isAdmin ? "admin/" : ""}dashboard`}>
                       Dashboard
                     </Link>
-                  </MenuItem>
+                  </MenuItem> */}
+                  {
+                    user.user.isAdmin ? <MenuItem onClick={handleClose}>
+                      <Link to="/admin/dashboard">
+                        Dashboard
+                      </Link>
+                    </MenuItem> : null
+                  }
                   <MenuItem onClick={handleClose}>
                     <Button
                       onClick={handleLogout}

@@ -51,7 +51,7 @@ const cartSlice = createSlice({
       }
     },
 
-    clearCart: () => {
+    clearUserCart: () => {
       return [];
     },
   },
@@ -64,5 +64,5 @@ export const {
   updateProductItemQuantity,
   removeFromCart,
   updateCartItem,
-  clearCart,
+  clearUserCart,
 } = cartSlice.actions;

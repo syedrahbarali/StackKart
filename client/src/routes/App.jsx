@@ -21,6 +21,20 @@ import EditProduct from "../pages/admin/EditProduct";
 import UserList from "../pages/admin/UserList";
 import AddCategory from "../pages/admin/AddCategory";
 import AddProduct from "../pages/admin/AddProduct";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "../pages/CheckoutForm";
+import PaymentSuccess from "../pages/PaymentSuccess";
+import Address from "../pages/Address";
+import Orders from "../pages/Orders";
+import OrderDetails from "../pages/OrderDetails";
+
+const stripePromise = loadStripe(`${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`)
+const options = {
+  mode: "payment",
+  amount: 1099,
+  currency: "usd",
+};
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,6 +79,8 @@ const App = () => {
               <Route path="" element={<Home />} />
               <Route path="/product/:productId" element={<Product />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/orders/:orderId" element={<OrderDetails />} />
               <Route path="/profile/:userId" element={<Profile />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/products" element={<ProductList />} />
@@ -76,6 +92,18 @@ const App = () => {
               <Route path="/admin/users" element={<UserList />} />
               <Route path="/admin/addCategory" element={<AddCategory />} />
               <Route path="/admin/addProduct" element={<AddProduct />} />
+
+              <Route
+                path="/checkout"
+                element={
+                  <Elements stripe={stripePromise} options={options}>
+                    <CheckoutForm />
+                  </Elements>
+                }
+              />
+
+              <Route path="/address" element={<Address />} />
+              <Route path="/payment/success" element={<PaymentSuccess />} />
             </Route>
 
             <Route path="/login" element={<Login />} />

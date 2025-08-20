@@ -27,7 +27,15 @@ const orderModel = mongoose.Schema({
     type: Number,
     required: true,
   },
-  shippingAddress: {
+  shippingDetails: {
+    fullName: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
     street: {
       type: String,
       required: true,
@@ -44,20 +52,25 @@ const orderModel = mongoose.Schema({
       type: String,
       required: true,
     },
-    zip: {
-      type: String,
+    postalCode: {
+      type: Number,
       required: true,
     },
   },
   paymentMethod: {
     type: String,
-    enum: ["COD", "Card", "UPI"],
-    required: true,
   },
   paymentStatus: {
     type: String,
-    enum: ["Pending", "Success", "Failed"],
-    default: "Pending",
+    default: "pending",
+  },
+  stripePaymentIntentId: {
+    type: String,
+    required: true,
+  },
+  stripeChargeId: {
+    type: String,
+    default: null,
   },
   deliveryStatus: {
     type: String,

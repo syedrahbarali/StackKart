@@ -34,7 +34,7 @@ export const fetchAddToCart = async (item, quantity) => {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({product:item, quantity}),
+    body: JSON.stringify({ product: item, quantity }),
   }).then(async (res) => await res.json());
 };
 

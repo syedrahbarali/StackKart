@@ -44,7 +44,7 @@ const login = async (req, res) => {
       .status(200)
       .json({ message: "Login successful", token, user, ok: true });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -60,7 +60,7 @@ const findUser = async (req, res) => {
     });
     return res.status(200).json({ message: "User found", user, ok: true });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -96,7 +96,7 @@ const createUser = async (req, res) => {
         .json({ message: "User created successfully", ok: true });
     }
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -106,7 +106,7 @@ const logout = async (req, res) => {
     res.clearCookie("token");
     return res.status(200).json({ message: "Logout successful", ok: true });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };

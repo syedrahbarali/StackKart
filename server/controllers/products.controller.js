@@ -4,10 +4,10 @@ const deleteImage = require("../utils/deleteImage");
 
 const createProduct = async (req, res) => {
   try {
-    console.log("Inside createProduct controller");
+    //console.log("Inside createProduct controller");
     const { name, description, price, category, brand, stock } = req.body;
     const images = req.files;
-    console.log("Images: ", images);
+    //console.log("Images: ", images);
 
     if (
       !name.trim() ||
@@ -38,7 +38,7 @@ const createProduct = async (req, res) => {
         .json({ message: "Product created successfully", newProduct, ok: true });
     }
   } catch (err) {
-    console.log("Error Occurred: ", err.message);
+    //console.log("Error Occurred: ", err.message);
     res.status(500).json({ message: err.message, ok: false });
   }
 };
@@ -75,7 +75,7 @@ const deleteProduct = async (req, res) => {
 
     for (let i = 0; i < product.images.length; i++) {
       const result = await deleteImage(product.images[i].path);
-      console.log(result);
+      //console.log(result);
     }
 
     const deletedProduct = await product.deleteOne();
@@ -83,7 +83,7 @@ const deleteProduct = async (req, res) => {
       return res.status(200).json({ message: "Product deleted successfully" });
     }
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -98,7 +98,7 @@ const getProductById = async (req, res) => {
     }
     return res.status(200).json({ product, ok: true });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -109,7 +109,7 @@ const getProductByCategory = async (req, res) => {
     const products = await Product.find({ category });
     return res.status(200).json({ products, ok: true });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -119,7 +119,7 @@ const getAllProducts = async (req, res) => {
     const products = await Product.find({});
     return res.status(200).json({ products, ok: true });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
@@ -128,7 +128,7 @@ const deleteProductImage = async (req, res) => {
   try {
     const { imageId, productId } = req.body;
     const res = await deleteImage(imageId);
-    console.log(res);
+    //console.log(res);
     // const product = await Product.findOneAndUpdate(
     //   { _id: new mongoose.Types.ObjectId(productId) },
     //   { $pull: { images: { filename: imageId } } },

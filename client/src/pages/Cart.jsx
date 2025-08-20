@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoTrashOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFromCart } from "../services/cartService";
@@ -7,9 +7,11 @@ import { fetchAddToCart } from "../services/productServices";
 import { updateProductItemQuantity, removeFromCart } from "../store/slices/cart.slice";
 
 const Cart = () => {
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cart = useSelector((state) => state.cart) || [];
-  console.log(cart);
+
 
   // Total price calculate
   const totalPrice = cart.reduce((total, item) => {
@@ -33,18 +35,22 @@ const Cart = () => {
 
   const handleRemoveItem = async (itemId) => {
     try {
-      dispatch(removeFromCart(itemId)); // ✅ immediate update in Redux
       const response = await deleteFromCart(itemId);
-
+      
       if (!response.ok) {
         toast.error("Failed to remove item");
       } else {
+        dispatch(removeFromCart(itemId)); 
         toast.success("Item removed from cart");
       }
     } catch (error) {
       toast.error("Failed to remove item");
       console.error("Error removing item:", error);
     }
+  };
+
+  const handleCheckout = () => {
+    navigate("/address", { state: { totalAmount: totalPrice } });
   };
 
   return (
@@ -170,7 +176,10 @@ const Cart = () => {
                   <span>Total</span>
                   <span>₹{totalPrice}</span>
                 </div>
-                <button className="mt-6 w-full py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition">
+                <button 
+                  onClick={handleCheckout}
+                  className="mt-6 w-full py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
+                >
                   Proceed to Checkout
                 </button>
               </>

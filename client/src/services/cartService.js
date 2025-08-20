@@ -83,7 +83,7 @@ export const updateCartItemQuantity = async (itemId, quantity) => {
 // Clear entire cart
 export const clearCart = async () => {
   const response = await fetch(`${BASE_URL}/api/v1/customer/clearCart`, {
-    method: "DELETE",
+    method: "PATCH",
     credentials: "include",
   });
 

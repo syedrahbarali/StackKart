@@ -15,7 +15,7 @@ const createCategory = async(req,res) => {
             throw new Error("Failed to create category");
         }
     } catch (err) {
-        console.log(err.message);
+        //console.log(err.message);
         res.status(500).json({message: err.message, ok: false});
     }
 }
@@ -35,7 +35,7 @@ const deleteCategory = async(req,res) => {
             return res.status(200).json({message: "Category deleted successfully"});
         }
     } catch (err) {
-        console.log(err.message);
+        //console.log(err.message);
         res.status(500).json({message: err.message});
     }
 }
@@ -56,7 +56,7 @@ const renameCategory = async(req,res) => {
             return res.status(200).json({message: "Category updated successfully"});
         }        
     } catch (err) {
-        console.log(err.message);
+        //console.log(err.message);
         res.status(500).json({message: err.message});
     }
 }
@@ -70,7 +70,7 @@ const getAllCategories = async(req,res) => {
             throw new Error("No categories found");
         }
     } catch (err) {
-        console.log(err.message);
+        //(err.message);
         return res.status(500).json({message: err.message, ok: false});
     }
 }

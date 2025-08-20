@@ -96,9 +96,23 @@ const updateItemInCart = async (req, res) => {
       }
     );
   } catch (err) {
-    console.log(err.message);
     return res.status(500).json({ message: err.message });
   }
 };
 
-module.exports = { addToCart, deleteFromCart, updateItemInCart };
+const clearCart = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    await Cart.deleteMany({ userId: new mongoose.Types.ObjectId(`${_id}`) });
+    await User.updateOne(
+      { _id: new mongoose.Types.ObjectId(`${_id}`) },
+      { $unset: { cart: [] } }
+    );
+
+    return res.status(200).json({ ok: true });
+  } catch (err) {
+    return res.status(500).json({ message: err.message, ok: false });
+  }
+};
+
+module.exports = { addToCart, deleteFromCart, updateItemInCart, clearCart };

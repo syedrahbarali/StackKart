@@ -11,7 +11,7 @@ const deleteImage = async(imageId) => {
         
         return result;
     } catch (err) {
-        console.log(err)
+        //console.log(err)
         process.exit(1)
     }
 }

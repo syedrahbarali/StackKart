@@ -17,7 +17,7 @@ const adminAuthentication = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
