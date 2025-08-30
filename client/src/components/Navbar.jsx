@@ -70,7 +70,7 @@ const Navbar = () => {
           </div>
 
         ) : (
-          <CartPopover navItems={navItems} />
+          <CartPopover navItems={[...navItems, {name: "Dashboard", path: `${user.user.isAdmin ? "/admin/dashboard" : "/dashboard"}`}]} />
         )}
       </Container>
     </header>
