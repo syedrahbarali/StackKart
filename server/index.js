@@ -15,7 +15,7 @@ app.use("/api/v1/auth", authRoutes);
 // product routes: createProduct, updateProduct, deletProduct
 app.use("/api/v1/product", productRoutes);
 
-// category routes: createCategory, updateCategory, deleteCategory
+// category routes: createCategory, updateCate  gory, deleteCategory
 app.use("/api/v1/category", categoryRoutes);
 
 // customer routes: createOrder

@@ -1,7 +1,7 @@
 export const loginUser = async (email, password) => {
   console.log("loginUser");
 
-  return await fetch("http://localhost:3000/api/v1/auth/login", {
+  return await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const loginWithToken = async () => {
 };
 
 export const createAccount = async (name, email, password, phone) => {
-  return await fetch("http://localhost:3000/api/v1/auth/createAccount", {
+  return await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/createAccount`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
