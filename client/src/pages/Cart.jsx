@@ -110,7 +110,7 @@ const Cart = () => {
 
                   <div className="flex-1">
                     <h3 className="font-medium text-lg text-gray-800">
-                      {item?.product?.name}
+                      {item?.product?.name.slice(0, 50).concat("...")}
                     </h3>
                     <p className="text-gray-500 text-sm">
                       ₹{item?.product?.price}

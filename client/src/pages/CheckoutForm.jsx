@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { createPaymentIntent, getPaymentIntent } from "../services/paymentService";
 import { clearCart } from "../services/cartService";
 import { clearUserCart } from "../store/slices/cart.slice";
+import { updateStocks } from "../services/productServices";
 
 
 const CheckoutForm = () => {
@@ -86,6 +87,10 @@ const CheckoutForm = () => {
                 }).catch(err => {
                     toast.error(err.message);
                 });
+
+                await updateStocks(items).catch(err => {
+                    toast.error(err.message)
+                })
 
                 await clearCart().then(res => {
                     if (res?.ok) {

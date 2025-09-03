@@ -10,6 +10,7 @@ export const createOrder = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         items,
@@ -25,15 +26,14 @@ export const createOrder = async (
 };
 
 export const updateOrder = async (updatedItems) => {
-  console.log("PaymentStatus: ", typeof updatedItems.paymentStatus);
-  console.log("PaymentMethod: ", typeof updatedItems.paymentMethod);
-  console.log("StripeChargeId: ", typeof updatedItems.stripeChargeId);
+  
   return await fetch(
     `${import.meta.env.VITE_BASE_URL}/api/v1/customer/updateOrder`,
     {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(updatedItems),
       credentials: "include",
@@ -50,6 +50,10 @@ export const getAllOrders = async () => {
     {
       method: "GET",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      }
     }
   )
     .then(async (res) => await res.json())

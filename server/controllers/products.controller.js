@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Product = require("../models/product.model");
+const Order = require("../models/order.model");
 const deleteImage = require("../utils/deleteImage");
 
 const createProduct = async (req, res) => {
@@ -18,7 +19,9 @@ const createProduct = async (req, res) => {
       !stock ||
       !images.length
     ) {
-      return res.status(400).json({ message: "All fields are required", ok: false });
+      return res
+        .status(400)
+        .json({ message: "All fields are required", ok: false });
     }
 
     const product = new Product({
@@ -33,9 +36,11 @@ const createProduct = async (req, res) => {
     const newProduct = await product.save();
 
     if (newProduct?._id) {
-      return res
-        .status(201)
-        .json({ message: "Product created successfully", newProduct, ok: true });
+      return res.status(201).json({
+        message: "Product created successfully",
+        newProduct,
+        ok: true,
+      });
     }
   } catch (err) {
     //console.log("Error Occurred: ", err.message);
@@ -137,6 +142,42 @@ const deleteProductImage = async (req, res) => {
   } catch (err) {}
 };
 
+const getRelatedProducts = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+
+    const relatedProducts = await Product.find({
+      category: product.category,
+      brand: product.brand,
+      _id: { $ne: new mongoose.Types.ObjectId(`${productId}`) },
+    });
+    console.log("Related Products: ", relatedProducts);
+    return res.status(200).json({ relatedProducts, ok: true });
+  } catch (err) {
+    console.log("ERROR: \n", err.message);
+    return res.status(500).json({ message: err.message, ok: false });
+  }
+};
+
+const updateStocks = async (req,res) => {
+  try {
+    const products = req.body;
+    console.log(products)
+    const updates = products.map((item) => ({
+      updateOne: {
+        filter: { _id: item.productId, stock: { $gte: item.quantity } },
+        update: { $inc: { stock: -item.quantity } },
+      },
+    }));
+
+    await Product.bulkWrite(updates);
+    return res.status(200).json({ ok: true });
+  } catch (err) {
+    console.log(err)
+  }
+};
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -145,4 +186,6 @@ module.exports = {
   getAllProducts,
   getProductByCategory,
   deleteProductImage,
+  getRelatedProducts,
+  updateStocks
 };

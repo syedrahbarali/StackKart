@@ -5,6 +5,7 @@ export const createPaymentIntent = async (amount) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         amount,

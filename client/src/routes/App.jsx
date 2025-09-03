@@ -5,7 +5,6 @@ import Signup from "../pages/Signup";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Product from "../pages/Product";
 import Cart from "../pages/Cart";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -28,6 +27,8 @@ import PaymentSuccess from "../pages/PaymentSuccess";
 import Address from "../pages/Address";
 import Orders from "../pages/Orders";
 import OrderDetails from "../pages/OrderDetails";
+import ProductPage from "../pages/ProductPage";
+import Dashboard from "../pages/Dashboard";
 
 const stripePromise = loadStripe(`${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`)
 const options = {
@@ -77,8 +78,9 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomeLayout />}>
               <Route path="" element={<Home />} />
-              <Route path="/product/:productId" element={<Product />} />
+              <Route path="/product/:productId" element={<ProductPage />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:orderId" element={<OrderDetails />} />
               <Route path="/profile/:userId" element={<Profile />} />

@@ -5,14 +5,19 @@ const {
   getProductByCategory,
   getAllProducts,
   getProductById,
+  getRelatedProducts,
+  updateStocks,
 } = require("../controllers/products.controller");
 const upload = require("../middlewares/upload");
 const adminAuthentication = require("../middlewares/adminAuthentication");
+const authentication = require("../middlewares/authentication");
 const routes = require("express").Router();
 
 routes.get("/getAllProducts", getAllProducts);
+routes.get("/getRelatedProduct/:productId", getRelatedProducts);
 routes.get("/getProductById/:productId", getProductById);
 routes.get("/getProductByCategory/:category", getProductByCategory);
+routes.patch("/updateStocks", authentication, updateStocks);
 
 routes.post(
   "/createProduct",

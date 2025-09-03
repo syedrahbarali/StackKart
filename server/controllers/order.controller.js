@@ -45,7 +45,9 @@ const createOrder = async (req, res) => {
         ok: true,
       });
     } else {
-      return res.status(400).json({ message: "Order creation failed", ok: false });
+      return res
+        .status(400)
+        .json({ message: "Order creation failed", ok: false });
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -61,29 +63,20 @@ const updateOrder = async (req, res) => {
       stripeChargeId = "",
     } = req.body;
 
-    console.log("orderId: ", orderId);
-    console.log("Type of paymentStatus: ", typeof paymentStatus, paymentStatus);
-    console.log("Type of paymentMethod: ", typeof paymentMethod, paymentMethod);
-    console.log(
-      "Type of stripeChargeId: ",
-      typeof stripeChargeId,
-      stripeChargeId
-    );
-
-    return await Order.updateOne(
+    const updatedOrder = await Order.updateOne(
       { _id: new mongoose.Types.ObjectId(`${orderId}`) },
       { $set: { paymentStatus, paymentMethod, stripeChargeId } },
       { new: true }
-    ).then((updatedOrder) => {
-      return res.status(200).json({
-        message: "Updated",
-        updatedOrder,
-        ok: true,
-      });
+    );
+
+    return res.status(200).json({
+      message: "Updated",
+      updatedOrder,
+      ok: true,
     });
   } catch (err) {
     console.log(err.message);
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message, ok: false });
   }
 };
 

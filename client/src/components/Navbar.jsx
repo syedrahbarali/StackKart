@@ -24,7 +24,7 @@ const Navbar = () => {
 
   return (
     <header className="fixed w-full top-0 z-50 bg-white shadow-lg">
-      <Container className="flex items-center justify-between py-4 px-6">
+      <Container className="flex items-center justify-between py-4 px-4 md:px-6">
         <Logo className="flex-1" />
 
         {/* Desktop Nav */}
@@ -45,11 +45,11 @@ const Navbar = () => {
 
         {/* Desktop Auth */}
         {!user.status ? (
-          <div className="hidden md:flex items-center justify-end gap-4 flex-1">
+          <div className="flex items-center justify-end gap-2 md:gap-4 flex-1">
             {/* Login Button */}
             <Link
               to="/login"
-              className="relative py-2 px-6 border border-indigo-600 text-indigo-600 rounded-xl 
+              className="relative py-1 md:py-2 px-3 md:px-6 border border-indigo-600 text-indigo-600 rounded-xl 
                bg-transparent font-medium
                hover:bg-indigo-50 hover:shadow-lg hover:scale-105 
                transition-all duration-300 ease-in-out"
@@ -60,7 +60,7 @@ const Navbar = () => {
             {/* Signup Button */}
             <Link
               to="/signup"
-              className="py-2 px-6 rounded-xl font-semibold 
+              className="py-1 md:py-2 px-3 md:px-6 rounded-xl font-semibold 
                bg-gradient-to-r from-indigo-600 to-indigo-500 text-white 
                shadow-md hover:shadow-lg hover:scale-105
                transition-all duration-300 ease-in-out"
@@ -70,7 +70,9 @@ const Navbar = () => {
           </div>
 
         ) : (
-          <CartPopover navItems={navItems} />
+          <div className="flex items-center justify-end flex-1">
+            <CartPopover navItems={[...navItems, {name: "Dashboard", path: `${user.user.isAdmin ? "/admin/dashboard" : "/dashboard"}`}]} />
+          </div>
         )}
       </Container>
     </header>

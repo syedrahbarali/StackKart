@@ -26,23 +26,28 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await loginUser(email.current.value, password.current.value).then((res) => {
-      if (res.ok) {
-        dispatch(login(res.user));
+    await loginUser(email.current.value, password.current.value)
+      .then(async res => {
+        const token = res.headers.get("Authorization");
+        localStorage.setItem("token", token);
+        return await res.json();
+      }).then((res) => {
+        if (res.ok) {
+          dispatch(login(res.user));
 
-        if (res?.user?.cart?.length > 0) {
-          dispatch(getCartItems(res.user.cart));
+          if (res?.user?.cart?.length > 0) {
+            dispatch(getCartItems(res.user.cart));
+          }
+
+          toast.success("Welcome " + res?.user?.name);
+
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
+        } else {
+          toast.error(res.message);
         }
-
-        toast.success("Welcome " + res?.user?.name);
-
-        setTimeout(() => {
-          navigate("/");
-        }, 1500);
-      } else {
-        toast.error(res.message);
-      }
-    });
+      });
   };
 
   return (

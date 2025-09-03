@@ -36,6 +36,9 @@ export const fetchDashboardData = async () => {
     {
       method: "GET",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     }
   ).then(async (res) => await res.json());
 };
@@ -46,6 +49,9 @@ export const fetchAllOrders = async () => {
     {
       method: "GET",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     }
   ).then(async (res) => {
     if (!res.ok) throw new Error(res.message);
@@ -58,7 +64,10 @@ export const updateOrderStatus = async (orderId, status) => {
     `${import.meta.env.VITE_BASE_URL}/api/v1/admin/updateOrderStatus`,
     {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
       credentials: "include",
       body: JSON.stringify({ orderId, status }),
     }
@@ -74,6 +83,9 @@ export const fetchAllUsers = async () => {
     {
       method: "GET",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     }
   ).then(async (res) => {
     if (!res.ok) throw new Error(res.message);
@@ -87,6 +99,9 @@ export const updateProducts = async (formData) => {
     {
       method: "PATCH",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
       body: formData,
     }
   ).then(async (res) => {
@@ -100,7 +115,10 @@ export const deleteProductImage = async (imageId, productId) => {
     `${import.meta.env.VITE_BASE_URL}/api/v1/admin/deleteProductImage`,
     {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
       credentials: "include",
       body: JSON.stringify({ productId, imageId }),
     }
@@ -117,6 +135,9 @@ export const updateUser = async () => {
     {
       method: "PATCH",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     }
   ).then(async (res) => {
     if (!res.ok) throw new Error(res.message);
@@ -130,6 +151,9 @@ export const addCategory = async (category) => {
     {
       method: "POST",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
       body: category,
     }
   ).then(async (res) => {
@@ -144,6 +168,9 @@ export const addProduct = async (product) => {
     {
       method: "POST",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
       body: product,
     }
   ).then(async (res) => {
@@ -151,15 +178,18 @@ export const addProduct = async (product) => {
   });
 };
 
-export const fetchCategories = async() => {
+export const fetchCategories = async () => {
   return await fetch(
     `${import.meta.env.VITE_BASE_URL}/api/v1/category/getAllCategories`,
     {
       method: "GET",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     }
   ).then(async (res) => {
     if (!res.ok) throw new Error(res.message);
     return await res.json();
   });
-}
+};

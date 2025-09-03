@@ -23,12 +23,12 @@ const CartPopover = ({ navItems }) => {
     const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
     const latestItems = cart.slice(-3).reverse();
     return (
-        <div className="flex items-center gap-4 sm:gap-3">
+        <div className="flex items-center gap-2 md:gap-4">
             {/* Cart with hover dropdown */}
             <Popover>
                 <PopoverTrigger asChild>
                     <span className="relative flex items-center cursor-pointer">
-                        <IoCartOutline size={22} className="sm:size-[20px]" />
+                        <IoCartOutline size={20} className="md:size-[22px]" />
 
                         {cartItemCount > 0 && (
                             <Badge
@@ -94,4 +94,4 @@ const CartPopover = ({ navItems }) => {
     )
 }
 
-export default CartPopover
+export default CartPopover;

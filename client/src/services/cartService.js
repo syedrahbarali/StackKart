@@ -1,13 +1,14 @@
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Add item to cart
 export const addToCart = async (productId, quantity = 1) => {
-  console.log("Product Id: ", productId) 
+  console.log("Product Id: ", productId);
   console.log("Quantity: " + quantity);
   const response = await fetch(`${BASE_URL}/api/v1/customer/addToCart`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
     },
     credentials: "include",
     body: JSON.stringify({ product: productId, quantity }),
@@ -27,6 +28,9 @@ export const getCartItems = async () => {
   const response = await fetch(`${BASE_URL}/api/v1/customer/getCart`, {
     method: "GET",
     credentials: "include",
+    headers: {
+      Authorization: `${localStorage.getItem("token")}`,
+    },
   });
 
   const data = await response.json();
@@ -45,6 +49,9 @@ export const deleteFromCart = async (itemId) => {
     {
       method: "DELETE",
       credentials: "include",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     }
   );
 
@@ -65,6 +72,7 @@ export const updateCartItemQuantity = async (itemId, quantity) => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
       },
       credentials: "include",
       body: JSON.stringify({ quantity }),
@@ -82,16 +90,14 @@ export const updateCartItemQuantity = async (itemId, quantity) => {
 
 // Clear entire cart
 export const clearCart = async () => {
-  const response = await fetch(`${BASE_URL}/api/v1/customer/clearCart`, {
+  return await fetch(`${BASE_URL}/api/v1/customer/clearCart`, {
     method: "PATCH",
     credentials: "include",
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to clear cart");
-  }
-
-  return data;
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
+    },
+  })
+    .then(async (res) => await res.json())
+    .catch((err) => console.log(err));
 };

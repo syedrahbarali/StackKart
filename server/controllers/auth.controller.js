@@ -39,12 +39,12 @@ const login = async (req, res) => {
     user = user.toObject();
     delete user.password;
 
-    res.cookie("token", token, { httpOnly: true });
+    res.setHeader("Authorization", `Bearer ${token}`);
+    res.setHeader("Access-Control-Expose-Headers", "Authorization");
     return res
       .status(200)
       .json({ message: "Login successful", token, user, ok: true });
   } catch (err) {
-    //console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };
