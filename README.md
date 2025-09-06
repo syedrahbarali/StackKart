@@ -47,7 +47,7 @@ server/   # Node.js backend (Express)
 2. Configure environment variables in `client/.env.local` and `server/.env` (see example files).
 3. Start backend:
    ```sh
-   npm run dev
+   npm start
    ```
 4. Start frontend:
    ```sh
