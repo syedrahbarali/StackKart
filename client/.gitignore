@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-public/*.jpg
+# public/*.jpg
 
 node_modules
 dist
